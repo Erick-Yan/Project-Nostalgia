@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary border text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+    <form class='add_form' action="/add" method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+              <label for="inputEmail4">Memory Title</label>
+              <input name='title' type="text" class="form-control" placeholder="Title"/>
+            </div>
+            <div class="col">
+              <label for="inputEmail4">Date</label>
+              <input name='date' type="date" class="form-control" placeholder="Date"/>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+              <label for="inputEmail4">Location</label>
+              <input name='location' type="text" class="form-control" placeholder="Location"/>
+            </div>
+         </div>
+         <div class="form-group">
+            <label class="music" for="music">Music<p class='quest_music'>?<span class='expand'>Select A Song That Defined This Moment.</span></p></label>
+            <input type="file" name="music" class="custom-control-file" id="music"/>
+          </div>
+        <div>
+            <label for="exampleFormControlTextarea1">Journal Entry</label>
+            <textarea name='entry' class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+        </div>
+        <div class="custom-file-container" data-upload-id="myUniqueUploadId">
+          <label class="music" for="music">Photos<p class='quest_music'>?<span class='expand'>Maximum 9 Photos.</span></p><a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">&times;</a></label>
+    
+          <label class="custom-file-container__custom-file" >
+              <input type="file" name='photos[]' class="custom-file-container__custom-file__custom-file-input" accept="image/*" multiple aria-label="Choose File">
+              <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+              <span class="custom-file-container__custom-file__custom-file-control"></span>
+          </label>
+          <div class="custom-file-container__image-preview" style='width:16rem; height:16rem; margin-left:auto; margin-right:auto; margin-top:1rem;'></div>
+      </div>
+        <button class=" btn btn_add" type="submit">Create Memory</button>
+    </form>
+    <script src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js"></script>
+    <script>
+        var upload = new FileUploadWithPreview('myUniqueUploadId', {
+                showDeleteButtonOnImages: true,
+                text: {
+                    chooseFile: 'Custom Placeholder Copy',
+                    browse: 'Select File',
+                    selectedCount: 'Custom Files Selected Copy',
+                }
+            });
+    </script>
+    <script>
+      $(document).ready(function() {
+            $('.add_form').addClass('loaded');
+        })
+    </script>
+{% endblock %}

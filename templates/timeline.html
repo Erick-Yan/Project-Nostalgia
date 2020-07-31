@@ -1,0 +1,219 @@
+{% extends "layout.html" %}
+
+{% block body %}
+      <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Timeline
+        </button>
+        <div class="dropdown-menu white" aria-labelledby="dropdownMenuButton">
+          <div class="list-group" id="myList" role="tablist">
+            <input type="text" id="myInput" onkeyup="Filter()" placeholder="Search..." title="Type in a name">
+            {% for i in range(length) %}
+              <a class="list-group-item list-group-item-action" data-toggle="list" href={{ id_list[i] }} role="tab" name="tabs">{{ timeline_list[i]['date'][:10] }}<p style='display:None;'>{{ timeline_list[i]['title'] }}</p></a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+        <form action="/timeline" method="POST" class="tab-content">
+          {% set n = [0] %}
+          {% for i in range(length) %}
+            <div class="tab-pane" id={{ id_list[i][1:] }} role="tabpanel">
+              <h3 class='title'>{{ timeline_list[i]['title'] }}</h3>
+              <div class='location'>
+                  <img src='static/location.png' height=30 width=25>
+                  <p class = 'location_title'>{{ timeline_list[i]['location'] }}</p>
+              </div>
+              <div class='audio'>
+                <audio src="static/uploads/music/{{ timeline_list[i]['music'] }}" controls>
+                  <p>If you are reading this, it is because your browser does not support the audio element.</p>
+                </audio>
+                <div><p>{{ timeline_list[i]['music'] }}</p></div>
+              </div>
+                <div class="row1">
+                  {% for j in [timeline_list[i]['photo1'], timeline_list[i]['photo2'], timeline_list[i]['photo3']] %}
+                    {% if j != " " %}
+                    {% if n.append(n.pop() + 1) %}{% endif %}
+                      <div style="
+                      height:7rem;
+                      position:relative;
+                      align-content:center;
+                      justify-content: center;
+                      margin-right:0.25rem;
+                      margin-bottom:0.25rem;
+                      width:7rem;
+                      overflow:hidden;
+                      transition: ease-in 0.3s;", onclick="openModal();currentSlide('{{ n[0] }}')"><img class='set1' src='static/uploads/images/{{ j }}'></div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <div class="row1">
+                  {% for j in [timeline_list[i]['photo4'], timeline_list[i]['photo5'], timeline_list[i]['photo6']] %}
+                    {% if j != " " %}
+                    {% if n.append(n.pop() + 1) %}{% endif %}
+                    <div style="
+                    height:7rem;
+                    position:relative;
+                    align-content:center;
+                    justify-content: center;
+                    margin-right:0.25rem;
+                    margin-bottom:0.25rem;
+                    width:7rem;
+                    overflow:hidden;
+                    transition: ease-in 0.3s;", onclick="openModal();currentSlide('{{ n[0] }}')"><img src='static/uploads/images/{{ j }}'></div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <div class="row1">
+                  {% for j in [timeline_list[i]['photo7'], timeline_list[i]['photo8'], timeline_list[i]['photo9']] %}
+                    {% if j != " " %}
+                    {% if n.append(n.pop() + 1) %}{% endif %}
+                    <div style="
+                    height:7rem;
+                    position:relative;
+                    align-content:center;
+                    justify-content: center;
+                    margin-right:0.25rem;
+                    margin-bottom:0.25rem;
+                    width:7rem;
+                    overflow:hidden;
+                    transition: ease-in 0.3s;", onclick="openModal();currentSlide('{{ n[0] }}')"><img src='static/uploads/images/{{ j }}'></div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              <div style='margin-left:0.25rem;' class='journal'>
+                  <p style='margin-bottom: 0.05rem; font-style: italic;'>
+                    {{ timeline_list[i]['date'][:10]}}
+                  </p>
+                  <p>
+                    {{ timeline_list[i]['entry'] }}
+                  </p>
+              </div>
+              <button class='btn btn_delete' type='submit' name='submit_button' value="{{ timeline_list[i]['title'] }}" style='margin-bottom:2rem; transform: scale(0.75);'>Delete</button>
+            </div>
+          {% endfor %}
+          </form>
+    <div id="myModal" class="modal">
+      <span class="close cursor" onclick="closeModal()">x</span>
+      <div class="modal-content">
+        {% for i in range(length) %}
+          {% for j in [timeline_list[i]['photo1'], timeline_list[i]['photo2'], timeline_list[i]['photo3'], timeline_list[i]['photo4'], timeline_list[i]['photo5'], timeline_list[i]['photo6'], timeline_list[i]['photo7'], timeline_list[i]['photo8'], timeline_list[i]['photo9']] %}
+            {% if j != ' ' %}
+              <div class="mySlides">
+                <div class="caption-container">
+                  <p id="caption">{{ timeline_list[i]['title'] }}</p>
+                </div>
+                <img src="static/uploads/images/{{ j }}" style="width:100%">
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    {% for i in range(length_photos) %}
+      <label id="photo_{{i}}" name="{{photos_each[i]}}" style="display: none;"></label>
+    {% endfor %}
+    <label id="length" name="{{length_photos}}" style="display: none;"></label>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+      $(function () {
+        $('#myList a:last-child').tab('show')
+      });
+
+      $('.dropdown-toggle').dropdown();
+    </script>
+    <script>
+      var photos = [];
+      var length_photos = parseInt(document.getElementById("length").getAttribute("name"));
+      for (var j = 0; j < length_photos; j++){
+        var k = document.getElementById("photo_" + j).getAttribute("name");
+        photos.push(k);
+      }
+      console.log(photos);
+      
+      var lower_lim = [];
+      var upper_lim = [];
+      
+      function openModal() {
+        document.getElementById("myModal").style.display = "block";
+        lower_lim = [];
+        upper_lim = [];
+      }
+
+      function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+      }
+
+      var slideIndex = 1;
+      showSlides(slideIndex);
+
+      function plusSlides(n) {
+        n = parseInt(n)
+        showSlides(slideIndex += n);
+      }
+
+      function currentSlide(n) {
+        n = parseInt(n)
+        showSlides(slideIndex = n);
+      }
+
+      function showSlides(n) {
+        var l = 0;
+        do{
+          if (n === parseInt(photos[l]) && parseInt(photos[l]) === 0){
+            lower_lim.push(1);
+            upper_lim.push(parseInt(photos[l+1]));
+            break;
+          }
+          else if(n === parseInt(photos[l]) && parseInt(photos[l]) != 0){
+            lower_lim.push(parseInt(photos[l-1]) + 1);
+            upper_lim.push(n);
+            break;
+          }
+          else if (n > parseInt(photos[l]) && n < parseInt(photos[l+1])){
+            lower_lim.push(parseInt(photos[l]) + 1);
+            upper_lim.push(parseInt(photos[l+1]));
+            break;
+          }
+          else{
+            l++;
+          }
+        }
+        while(lower_lim.length === 0 && upper_lim.length === 0 && l < length_photos);
+
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        if (n > upper_lim[0]) {slideIndex = lower_lim[0]}
+        if (n < lower_lim[0]) {slideIndex = upper_lim[0]}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+            console.log(lower_lim, upper_lim, n, slideIndex-1);
+        }
+        slides[slideIndex-1].style.display = "block";
+      }
+
+      function Filter() {
+        var input, filter, a_list, a, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        a_list = document.getElementsByName("tabs");
+        for (i = 0; i < a_list.length; i++) {
+            a = a_list[i];
+            console.log(a);
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a_list[i].style.display = "";
+            } else {
+                a_list[i].style.display = "none";
+            }
+        }
+    }
+
+        function myFunction() {
+        if (document.body.scrollTop > 0 || document.documentElement.scrollTop > 0) {
+          document.getElementsByClassName('set1').className = "slideUp2";
+        }
+        }
+    </script>
+{% endblock %}

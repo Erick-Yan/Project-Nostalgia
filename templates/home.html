@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class='front'>
+        <h1 class='main'>Project: NOSTALGIA</h1>
+        <h3 class='below'>Memories Begin Here.</h3>
+        {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary border text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+        <div class='flex2'><a href='#bottom'>⮛</a></div>
+    </div>
+    <div class='mission'>
+        <h6 id='quote'>"We Are All Pieces Of What We Remember..."<p style='font-size: 0.5rem; font-style:italic;'>- Cassandra Clare</p></h6>
+        <p id='mission'>
+            In a time where the existence of social media has taken over our hectic lives, 
+            memorable moments have often become subject to nothing more than for likes and shares. 
+            While a quick post can satisfy you for the day, we believe 
+            that the lost art of journaling can last you a lifetime. By bringing the 
+         journaling experience online, you will be able to cherish 
+            and save all your memories within our Timeline. We will also be optimizing 
+            your journals through music, a potent stimulator for nostalgia.
+            Through our online application, we hope to curate the most personalized experience for users 
+            to create and reminisce. Welcome to Project Nostalgia.
+        </p>
+        <div class='flex' id='bottom'>
+            <img src="static/book.png">
+            <img src="static/music.png">
+            <img src="static/pencil.png">
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('.front').addClass('loaded');
+            $('.main').addClass('loaded2');
+            $('.below').addClass('loaded3');
+        })
+    </script>
+    <script>
+        window.onscroll = function() {myFunction()};
+
+        function myFunction() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            document.getElementById('quote').className = "loaded";
+            document.getElementById('mission').className = "slideSide";
+        }
+        }
+    </script>
+{% endblock %}

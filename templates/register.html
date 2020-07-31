@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary border text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+    <form class='register_form' action="/register" method="post">
+        <h2 style='text-decoration:underline; color:lightskyblue'>Register To Join Our Community...</h2>
+        <div class="row">
+            <div class="col">
+              <label class='music' for="inputEmail4">First Name<p class='quest'>?<span class='expand'>What We Will Refer You As</span></p></label>
+              <input name='first_name' type="text" class="form-control" placeholder="First Name">
+            </div>
+            <div class="col">
+              <label for="inputEmail4">Last Name</label>
+              <input name='last_name' type="text" class="form-control" placeholder="Last Name">
+            </div>
+         </div>
+         <hr>
+         <div class="row">
+            <div class="col">
+              <label for="inputEmail4">Username</label>
+              <input name='username' type="text" class="form-control" placeholder="Username">
+            </div>
+         </div>
+         <hr>
+         <div class="row">
+            <div class="col">
+              <label class='music' for="inputEmail4">Password<p class='quest'>?<span class='expand'>Make The Password Unique</span></p></label>
+              <input name='password' type="password" class="form-control" placeholder="Password">
+            </div>
+            <div class="col">
+              <label for="inputEmail4">Confirm Password</label>
+              <input name='password_again' type="password" class="form-control" placeholder="Confirm Password">
+            </div>
+         </div>
+         <button style='margin-bottom: 2rem;' class="btn_register btn" type="submit">Register</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,702 @@
+html{
+  scroll-behavior: smooth;
+  height:100%;
+  overflow-x: hidden;
+  overflow-y:visible;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  font-size: 1rem;
+}
+
+@media (min-width: 576px) {
+  html { font-size: 1.55rem; }
+}
+@media (min-width: 768px) {
+  html { font-size: 1.65rem; }
+}
+@media (min-width: 992px) {
+  html { font-size: 1.75rem; }
+}
+@media (min-width: 1200px) {
+  html { font-size: 2rem; }
+}
+
+.navbar{
+  z-index:99;
+  position: fixed;
+}
+
+.AB{
+  position: fixed;
+  width: 0;
+  height: 10rem;
+  transform: translateY(-10rem);
+  transition: transform 0.1s ease-in;
+  z-index: 98;
+  background:transparent;
+  margin-left: -0.25rem;
+}
+
+.AB ul{
+  list-style:none;
+  margin-top:0rem;
+}
+
+.AB ul li{
+  opacity:0;
+  text-decoration:none;
+}
+
+.AB ul li a{
+  color:lightskyblue;
+  font-family:Bahnschrift Light;
+  font-size:0.75rem;
+}
+
+.move{
+  transform: translateY(0px);
+}
+
+@keyframes fadein{
+  from{opacity:0; transform: translateY(-10rem);}
+  to{opacity:1; transform: translateY(4.5rem);}
+}
+
+.plus{
+  font-size:2rem;
+  color:lightskyblue;
+  opacity:0.4;
+}
+
+.navbar-toggler{
+  transition: ease-in 0.3s;
+  border-radius: 10rem;
+  width: 3.6rem;
+}
+
+.navbar-toggler:hover{
+  background-color:aliceblue;
+}
+
+.heading{
+  margin-left: 20px;
+  margin-top: 20px;
+  opacity:0.4;
+  font-size: 1.5rem;
+  font-family:Bahnschrift Light;
+}
+
+.heading a{
+  color:lightskyblue;
+  transition: ease-in 0.2s;
+}
+
+.heading:hover a{
+  opacity:1;
+  text-decoration:none;
+}
+
+.front{
+  background-image: linear-gradient(to top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.85) 20%, rgba(255, 255, 255, 0) 60%), url('front1.jpg');
+  height:100%;
+  background-attachment: sticky;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size:cover;
+  position: relative;
+  opacity:0;
+}
+
+.loaded{
+animation-duration: 2.5s; /* the duration of the animation */
+animation-timing-function: ease-in; /* how the animation will behave */
+animation-delay: 0.3s; /* how long to delay the animation from starting */
+animation-iteration-count: 1; /* how many times the animation will play */
+animation-name: front; /* the name of the animation we defined above */
+animation-fill-mode: forwards;
+}
+
+@keyframes front{
+0% {opacity:0;}
+75% {opacity:1;}
+100% {opacity:1;}
+}
+
+.front h1{
+  position: absolute;
+  font-family: Bahnschrift Light;
+  font-weight: 500;
+  width:1000px;
+  text-align: center;
+  top: 6rem;
+  margin-left:50%;
+  left:-500px;
+  color:aliceblue;
+  font-size:2.5rem;
+  opacity:0;
+}
+
+.loaded2{
+animation-duration: 2.5s; /* the duration of the animation */
+animation-timing-function: ease-in; /* how the animation will behave */
+animation-delay: 1s; /* how long to delay the animation from starting */
+animation-iteration-count: 1; /* how many times the animation will play */
+animation-name: expand; /* the name of the animation we defined above */
+animation-fill-mode: forwards;
+}
+
+@keyframes expand{
+0% {opacity:0;}
+100% {opacity:1; text-shadow: 5px 5px black;}
+}
+
+.front h3{
+  position: absolute;
+  margin: auto;
+  width:1000px;
+  text-align: center;
+  top: 9rem;
+  margin-left:50%;
+  left:-500px;
+  color:aliceblue;
+  font-size: 1rem;
+  opacity: 0;
+}
+
+.loaded3{
+animation-duration: 2.5s; /* the duration of the animation */
+animation-timing-function: ease-in; /* how the animation will behave */
+animation-delay: 3s; /* how long to delay the animation from starting */
+animation-iteration-count: 1; /* how many times the animation will play */
+animation-name: appear; /* the name of the animation we defined above */
+animation-fill-mode: forwards;
+}
+
+@keyframes appear{
+0% {opacity:0;}
+100% {opacity:1; text-decoration: underline;}
+}
+
+.flex2 {
+  position:absolute;
+  width: 400px;
+  top: 14.5rem;
+  left: -200px;
+  margin-left:50%;
+  text-align:center;
+  font-size: 2rem;
+  animation: up 1s linear infinite;
+}
+
+.flex2 a{
+  text-decoration:none;
+  color:lightskyblue;
+  transition: ease-in 0.2s;
+}
+
+.flex2 a:hover{
+  color:hotpink;
+}
+
+@keyframes up{
+      0%, 100% {top:14.5rem;}
+      50% {top:15rem;}
+}
+
+.mission{
+margin-left: auto;
+margin-right: auto;
+margin-top: 2rem;
+width: 75%;
+}
+
+#mission{
+font-size: 0.5rem;
+opacity:0;
+}
+
+.slideSide {
+animation-name: slideSide;
+animation-delay: 1s;
+animation-duration: 1s;
+visibility: visible;
+animation-fill-mode: forwards;
+}
+
+@keyframes slideSide {
+0% {
+  opacity: 0;
+  -webkit-transform: translateX(70%);
+} 
+100% {
+  opacity: 1;
+  -webkit-transform: translateX(0%);
+}
+}
+
+#quote{
+opacity: 0;
+}
+
+.flex{
+display: flex;
+margin-left:auto;
+margin-right:auto;
+margin-top: -1rem;
+width: 60%;
+}
+
+.flex img{
+transform: scale(0.45);
+flex:1;
+height: 6.5rem;
+width: 2rem;
+vertical-align:top;
+}
+
+.slideUp {
+animation-name: slideUp;
+-webkit-animation-name: slideUp;
+animation-duration: 1s;
+animation-delay: 5s;
+-webkit-animation-duration: 1s;
+visibility: visible;
+animation-fill-mode: forwards;
+}
+
+@keyframes slideUp {
+0% {
+  opacity: 0;
+  -webkit-transform: translateY(70%);
+} 
+100% {
+  opacity: 1;
+  -webkit-transform: translateY(0%);
+}
+}
+
+/* add.html */
+
+form{
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 4rem;
+  width: 75%;
+}
+
+.add_form{
+  color:rgb(247, 155, 121);
+  opacity:0;
+}
+
+p {
+margin-top: 0;
+}
+.my-form {
+margin-bottom: 10px;
+}
+
+.button {
+display: inline-block;
+padding: 10px;
+background: coral;
+border-radius: 5px;
+border: 1px solid coral;
+color:white;
+}
+#fileElem {
+display: none;
+}
+
+.btn_add{
+  position:relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 9rem;
+  margin-left: 50%;
+  left: -4.5rem;
+  background-color: coral;
+  transition: 0.3s ease-in;
+  color:white;
+}
+
+.btn_add:hover{
+  transform: scale(0.9);
+}
+
+.custom-file-container__image-multi-preview__single-image-clear__icon {
+display:none;
+}
+
+/* Info Expand */
+
+.music{
+  display:flex;
+  width: 11rem;
+  height: 2rem;
+  transition: 0.3s ease-in;
+  margin-bottom: -0.01rem;
+}
+
+.music label{
+  flex:3;
+}
+
+.quest{
+  flex:0.06;
+  border: 1px slategray solid;
+  border-radius: 3rem;
+  width: 0.6rem;
+  height:0.6rem;
+  font-size: 0.35rem;
+  font-weight:bold;
+  padding-left:0.2rem;
+  margin-top: 0.52rem;
+  margin-left: 0.3rem;
+  background-color:slategray;
+  color:aliceblue;
+  z-index:99;
+  transition:0.3s ease-in;
+}
+
+.quest_music{
+  flex:0.05;
+  border: 1px slategray solid;
+  border-radius: 3rem;
+  width: 0.6rem;
+  height:0.6rem;
+  font-size: 0.35rem;
+  font-weight:bold;
+  padding-left:0.2rem;
+  margin-top: 0.52rem;
+  margin-left: 0.3rem;
+  background-color:slategray;
+  color:aliceblue;
+  z-index:99;
+  transition:0.3s ease-in;
+}
+
+.expand{
+  display:none;
+  padding-left: 0.3rem;
+  font-size: 0.35rem;
+  transition: 0.2s ease-in;
+  margin-top: -0.5rem;
+}
+
+.music p:hover{
+  flex: 2;
+  color:slategray;
+  background-color:aliceblue;
+  border: 1px aliceblue solid;
+}
+
+.music p:hover .expand{
+  animation: movein 1s;
+  display:block;
+}
+
+@keyframes movein{
+  0% {opacity:0;}
+  50% {opacity:0;}
+  100% {opacity:1;}
+}
+
+/* register.html */
+
+.register_form{
+  color:lightskyblue;
+}
+
+.btn_register{
+  position:relative;
+  margin-top: 60px;
+  width: 9rem;
+  margin-left: 50%;
+  left: -4.5rem;
+  background-color: lightskyblue;
+  transition: 0.3s ease-in;
+  color:white;
+}
+
+.btn_register:hover{
+  transform: scale(0.9);
+}
+
+/* timeline.html */
+.form{
+  margin-left: 2.85rem;
+  padding-top: 3rem;
+}
+
+.list-group{
+  margin-top: 0rem;
+  transform: scale(0.5);
+  width: 10rem;
+  position: sticky;
+}
+
+.tab-content{
+  width: 30rem;
+}
+
+.location{
+  display:flex;
+}
+
+.location img{
+  flex:0.05;
+  width: 1rem;
+  height: 1rem;
+}
+
+.location p{
+  flex:3;
+  margin-left: 0.5rem;
+  margin-top: -0.3rem;
+}
+
+.row1 {
+display: -ms-flexbox; /* IE10 */
+display: flex;
+-ms-flex-wrap: wrap; /* IE10 */
+flex-wrap: wrap;
+padding: 0 0.25rem;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+-ms-flex: 10%; /* IE10 */
+flex: 10%;
+max-width: 25%;
+padding: 0 0.2rem;
+}
+
+.row1 div:hover{
+opacity: 0.7;
+border:none;
+}
+
+.row1 div img{
+  position:absolute;
+  object-fit:cover;
+  min-width:100%;
+  max-width:130%;
+  min-height:100%;
+  max-height:150%;
+  left:0;
+  top:0;
+  display:block;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+.column {
+  -ms-flex: 50%;
+  flex: 50%;
+  max-width:50%;
+}
+
+.column div{
+  width: 8rem;
+  height:8rem;
+}
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+.column {
+  -ms-flex: 100%;
+  flex: 100%;
+  max-width: 100%;
+}
+.column div{
+  width: 8rem;
+  height:8rem;
+}
+}
+
+/* lightbox */
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: sticky;
+  z-index: 99;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow:auto;
+  background-color: rgba(0, 0, 0, 0.692);
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color:transparent;
+  margin: auto;
+  padding: 0;
+  width: 90%;
+  max-width: 1200px;
+  border:none;
+  height: 3rem;
+}
+
+.caption-container {
+  text-align: center;
+  color: aliceblue;
+  padding-top: 1rem;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  margin-top: 10px;
+  margin-right: 25px;
+}
+
+.mySlides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: rgb(5, 5, 5);
+  font-weight: bold;
+  font-size: 60px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: white;
+}
+
+.modal-content img {
+    position:absolute;
+    transform: scale(0.55);
+    margin-top: -5rem;
+    width: 22rem;
+    height: 22rem;
+    object-fit: scale-down;
+}
+
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+
+/* Search */
+#myInput {
+background-position: 10px 10px;
+background-repeat: no-repeat;
+padding-left: 0.25rem;
+width: 100%;
+height: 2rem;
+font-size: 1rem;
+border: 1px solid lightskyblue;
+margin-bottom: 0.25rem;
+margin-top: 2rem;
+}
+
+/* music */
+
+audio{
+width: 12rem;
+height: 1.5rem;
+}
+
+.audio{
+margin-bottom: 0.5rem;
+margin-top: -0.25rem;
+}
+
+.audio div{
+overflow:hidden;
+width: 12rem;
+height: 1rem;
+}
+
+.audio p{
+font-size: 0.5rem;
+width: 14rem;
+animation: slide linear 4s;
+animation-iteration-count: infinite;
+}
+
+@keyframes slide{
+0% {margin-left: -12rem; opacity:0;}
+50% {margin-left:0; opacity:1;}
+100% {margin-left: 12rem; opacity:0;}
+}
+
+
+/* lazy loading */
+
+.lazy{
+opacity:0;
+transition: opacity 1s;
+}
+
+/* tab */
+
+.dropdown{
+  position:fixed;
+  right:0;
+}
+
+.dropdown button{
+  position:relative;
+  margin-top: 4rem;
+  transform:scale(0.5);
+  opacity: 0.6;
+  display:block;
+}
+
+.dropdown-menu{
+  height:4rem;
+  top: 2rem;
+  background:transparent;
+  border:none;
+}
+
+.list-group{
+  position:absolute;
+  right: -10rem;
+  left:1.25rem;
+  top:-2rem;
+  height: 5rem;
+}
+
+/* jounral */
+
+.journal p{
+  font-size: 0.65rem;
+  text-align: justify;
+}
