@@ -3,6 +3,7 @@ import os
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for, copy_current_request_context
 from flask_session import Session
+from flask_sqlalchemy import SQLAlchemy
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -16,8 +17,8 @@ import logging.handlers
 
 app = Flask(__name__)
 
-IMAGE_UPLOADS = '/Users/erick/Downloads/finalproject/finalproject/static/uploads/images'
-MUSIC_UPLOADS = '/Users/erick/Downloads/finalproject/finalproject/static/uploads/music'
+IMAGE_UPLOADS = '/home/Erick3/mysite/static/uploads/images'
+MUSIC_UPLOADS = '/home/Erick3/mysite/static/uploads/music'
 ALLOWED_EXTENSIONS = {'mp3', 'png', 'jpg', 'jpeg'}
 
 # Configure application
@@ -41,7 +42,48 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-db = SQL("sqlite:///moments.db")
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username="Erick3",
+    password="33ey9851001",
+    hostname="Erick3.mysql.pythonanywhere-services.com",
+    databasename="Erick3$moments"
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
+
+class Users(db.Model):
+
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.Text)
+    hash = db.Column(db.Text)
+    last_name = db.Column(db.Text)
+    first_name = db.Column(db.Text)
+
+class Moments(db.Model):
+
+    __tablename__ = "moments"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.Text)
+    title = db.Column(db.Text)
+    date = db.Column(db.Text)
+    location = db.Column(db.Text)
+    music = db.Column(db.Text)
+    entry = db.Column(db.Text)
+    photo1 = db.Column(db.Text)
+    photo2 = db.Column(db.Text)
+    photo3 = db.Column(db.Text)
+    photo4 = db.Column(db.Text)
+    photo5 = db.Column(db.Text)
+    photo6 = db.Column(db.Text)
+    photo7 = db.Column(db.Text)
+    photo8 = db.Column(db.Text)
+    photo9 = db.Column(db.Text)
 
 @app.route("/")
 def home():
@@ -84,14 +126,17 @@ def register():
             flash("Passwords Must Match")
             return render_template("register.html")
 
-        rows = db.execute("SELECT * FROM users WHERE username = :username", username=reg_username)
+        rows = db.engine.execute("SELECT * FROM users WHERE username = %s;", reg_username)
+        rows = rows.fetchall()
         if len(rows) == 1:
             flash("Username Already Exists")
             return render_template("register.html")
 
-        reg_user = db.execute("INSERT INTO users (username, hash, last_name, first_name) VALUES (:username, :password, :last, :first)", username=reg_username, password=generate_password_hash(reg_password, method='pbkdf2:sha256', salt_length=8), last=reg_lastname, first=reg_firstname)
+        reg_user = db.engine.execute("INSERT INTO users (username, hash, last_name, first_name) VALUES (%s, %s, %s, %s)", reg_username, generate_password_hash(reg_password, method='pbkdf2:sha256', salt_length=8), reg_lastname, reg_firstname)
+        rows2 = db.engine.execute("SELECT * FROM users WHERE username = %s;", reg_username)
+        rows2 = rows2.fetchall()
 
-        session["user_id"] = reg_user
+        session["user_id"] = rows2[0]['id']
         flash(f"You have Registered as {reg_username}!")
         return redirect("/")
 
@@ -116,8 +161,9 @@ def login():
             return render_template("login.html")
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username",
-                          username=request.form.get("username"))
+        rows = db.engine.execute("SELECT * FROM users WHERE username = %s",
+                          request.form.get("username"))
+        rows = rows.fetchall()
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
@@ -164,15 +210,17 @@ def add():
             if i.filename == '':
                 flash('Must Include Photos')
                 return redirect(request.url)'''
-        
+
         title = request.form.get('title')
         date = request.form.get('date')
         location = request.form.get('location')
         entry = request.form.get('entry')
-        
-        row = db.execute("SELECT * FROM users WHERE id = :id", id = session['user_id'])
+
+        row = db.engine.execute("SELECT * FROM users WHERE id = %s", session['user_id'])
+        row = row.fetchall()
         username = row[0]['username']
-        title_check = db.execute("SELECT * FROM moments WHERE username = :username AND title = :title", username=username, title=title)
+        title_check = db.engine.execute("SELECT * FROM moments WHERE username = %s AND title = %s", username, title)
+        title_check = title_check.fetchall()
 
         if not title:
             flash('Must Include Title')
@@ -210,10 +258,10 @@ def add():
                 print(filename)
                 i.save(os.path.join(app.config['IMAGE_UPLOADS'], filename))
 
-        daba = db.execute("INSERT INTO moments (username, title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9) VALUES(:username, :title, :date, :location, :music, :entry, :photo1, :photo2, :photo3, :photo4, :photo5, :photo6, :photo7, :photo8, :photo9)",
-        username=username, title=title, date=date, location=location, music=music_file, entry=entry, 
-        photo1=photos_save[0], photo2=photos_save[1], photo3=photos_save[2], photo4=photos_save[3], photo5=photos_save[4],
-        photo6=photos_save[5], photo7=photos_save[6], photo8=photos_save[7], photo9=photos_save[8])
+        daba = db.engine.execute("INSERT INTO moments (username, title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        username, title, date, location, music_file, entry,
+        photos_save[0], photos_save[1], photos_save[2], photos_save[3], photos_save[4],
+        photos_save[5], photos_save[6], photos_save[7], photos_save[8])
 
         flash('A New Memory Has Been Added!')
         return redirect('/')
@@ -229,9 +277,11 @@ def timeline():
         '''{"title":[], "date":[], "location":[], "music":[], "entry":[], "photo1":[]
         "photo2":[], "photo3":[], "photo4":[], "photo5":[], "photo6":[], "photo7":[],"photo8":[], "photo9":[]}'''
 
-        row1 = db.execute("SELECT * FROM users WHERE id = :id", id = session['user_id'])
+        row1 = db.engine.execute("SELECT * FROM users WHERE id = %s", session['user_id'])
+        row1 = row1.fetchall()
         username = row1[0]['username']
-        row2 = db.execute("SELECT title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9 FROM moments WHERE username = :username ORDER BY date DESC", username = username)
+        row2 = db.engine.execute("SELECT title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9 FROM moments WHERE username = %s ORDER BY date DESC", username)
+        row2 = row2.fetchall()
 
         for i in row2:
             timeline_list.append(i)
@@ -247,17 +297,19 @@ def timeline():
             if i > 0:
                 photos_each[i] = photos_each[i] + photos_each[i - 1]
 
-        
+
         print(photos_each)
 
         return render_template("timeline.html", id_list = id_list, timeline_list = timeline_list, length = len(timeline_list), photos_each=photos_each, length_photos = len(photos_each))
     else:
         title = request.form['submit_button']
 
-        row1 = db.execute("SELECT * FROM users WHERE id = :id", id = session['user_id'])
+        row1 = db.engine.execute("SELECT * FROM users WHERE id = %s", session['user_id'])
+        row1 = row1.fetchall()
         username = row1[0]['username']
-        row2 = db.execute("SELECT title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9 FROM moments WHERE username = :username AND title = :title ORDER BY date DESC", username = username, title = title)
-        
+        row2 = db.engine.execute("SELECT title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9 FROM moments WHERE username = %s AND title = %s ORDER BY date DESC", username, title)
+        row2 = row2.fetchall()
+
         for i in [row2[0]['photo1'], row2[0]['photo2'], row2[0]['photo3'], row2[0]['photo4'], row2[0]['photo5'], row2[0]['photo6'], row2[0]['photo7'], row2[0]['photo8'], row2[0]['photo9'], row2[0]['music']]:
             if i != ' ':
                 if i != row2[0]['music'] and os.path.isfile("static/uploads/images/{one}".format(one=i)):
@@ -266,11 +318,14 @@ def timeline():
                     os.remove(os.path.join(app.config['MUSIC_UPLOADS'], i))
             else:
                 continue
-                
-        
-        daba = db.execute("DELETE FROM moments WHERE username = :username AND title = :title", username=username, title=title)
 
-        row3 = db.execute("SELECT title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9 FROM moments WHERE username = :username ORDER BY date DESC", username = username)
+
+        daba = db.engine.execute("DELETE FROM moments WHERE username = %s AND title = %s", username, title)
+        #daba = daba.fetchall()
+
+        row3 = db.engine.execute("SELECT title, date, location, music, entry, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9 FROM moments WHERE username = %s ORDER BY date DESC", username)
+        row3 = row3.fetchall()
+
         for i in row3:
             timeline_list.append(i)
             id_list.append('#' + i['title'])
@@ -286,7 +341,7 @@ def timeline():
                 photos_each[i] = photos_each[i] + photos_each[i - 1]
 
         return render_template("timeline.html", id_list = id_list, timeline_list = timeline_list, length = len(timeline_list), photos_each=photos_each, length_photos = len(photos_each))
-    
+
 
 
 if __name__ == '__main__':
